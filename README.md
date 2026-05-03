@@ -1,50 +1,127 @@
-# Welcome to your Expo app 👋
+# 🚨 Women Safety App  
+### Project User Manual  
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+## 1. Introduction  
 
-1. Install dependencies
+### 1.1 About the Application  
+The **Women Safety App** is a mobile-based safety solution designed to provide **instant emergency assistance**. It allows users to quickly send **SOS alerts** along with their **real-time location** to predefined emergency contacts.
 
-   ```bash
-   npm install
-   ```
+The application is built using **Expo (React Native)** for the frontend and **Node.js (Express)** for the backend, ensuring fast and reliable communication.
 
-2. Start the app
 
-   ```bash
-   npx expo start
-   ```
+### 1.2 Key Features  
 
-In the output, you'll find options to open the app in a
+- 🚨 **SOS Alert System**  
+  Trigger emergency alerts instantly with a single action  
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- 📍 **Real-Time Location Sharing**  
+  Share live location with emergency contacts  
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- 📡 **Backend Communication**  
+  Handles alert requests and data transmission  
 
-## Get a fresh project
+- 📱 **Expo Go Support**  
+  Run the application directly on a mobile device  
 
-When you're ready, run:
+
+## 2. System Requirements & Setup  
+
+### 2.1 Prerequisites  
+
+Ensure the following software is installed:
+
+| Requirement | Details |
+|------------|--------|
+| Node.js | Version 14 or above |
+| npm / yarn | Package manager |
+| Git | For cloning repository |
+| Expo Go | Mobile application |
+
+
+### 2.2 Installation Steps  
+
+#### Step 1: Clone the Repository  
 
 ```bash
-npm run reset-project
+git clone <(https://github.com/ShubhangiSingh7/WomenSafetyApp.git)>
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+#### Step 2: Install Frontend Dependencies 
 
-## Learn more
+```bash
+npm install
+```
+#### Step 3: Start Expo Server 
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npx expo start
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+#### Step 4: Run Backend Server
+```bash
+cd panic-backend
+node server.js
+```
 
-## Join the community
+## 3. Running the Application
 
-Join our community of developers creating universal apps.
+To run the complete system, ensure the following are active:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Service | Command |
+|------------|--------|
+| Frontend | npx expo start |
+| Backend | node server.js |
+
+## 4. 🔑 API Keys Configuration  
+
+This project requires the following API keys to function properly:
+
+| API Key | Purpose |
+|--------|--------|
+| `EXPO_PUBLIC_SUPABASE_KEY` | Used for authentication and database (Supabase) |
+| `QUICK_SMS_KEY` | Used for sending emergency SMS alerts |
+| `GROQ_API_KEY` | Used for AI-based processing (if implemented) |
+
+
+### 📁 Step: Create Environment File  
+
+Create a `.env` file in the root directory of your project:
+
+```env
+EXPO_PUBLIC_SUPABASE_KEY=your_supabase_key_here
+```
+Create a `.env` file in the panic-backend folder of the project:
+```env
+QUICK_SMS_KEY=your_quick_sms_key_here
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+## 4. Using the Application
+**4.1 Launching the App**
+1. Open Expo Go on your mobile device
+2. Scan the QR code displayed in terminal/browser
+3. The application will load automatically
+
+**4.2 Sending an SOS Alert**
+1. Open the application
+2. Grant required permissions (Location)
+3. Press the SOS button
+
+**4.3 System Response**
+
+Once triggered, the system will:
+
+1. Send emergency alert
+2. Share real-time location
+3. Notify emergency contacts
+
+## 5. Future Enhancements
+1. SMS and call integration
+2. AI-based safety detection
+3. Safe/unsafe zone alerts
+4. Push notifications
+
+## 6. Conclusion
+
+The Women Safety App provides a simple, fast, and reliable solution for emergency situations. By combining real-time communication with mobile accessibility, it ensures user safety with minimal effort.
