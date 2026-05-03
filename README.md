@@ -1,50 +1,111 @@
-# Welcome to your Expo app 👋
+🚨 Women Safety App (Expo Go Setup)
+📌 Overview
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The Women Safety App is a mobile application that helps users stay safe by sending instant SOS alerts and sharing real-time location with emergency contacts.
 
-## Get started
+This project uses:
 
-1. Install dependencies
+Expo Go (React Native) for frontend
+Node.js (Express) for backend
+Ngrok to connect mobile app with local backend
+⚙️ Features
+🚨 One-tap SOS alert
+📍 Live location tracking
+📡 Real-time backend communication
+📱 Works directly on your phone using Expo Go
+📦 Prerequisites
 
-   ```bash
-   npm install
-   ```
+Make sure you have:
 
-2. Start the app
+Git
+Node.js (v14+)
+npm or yarn
+Expo Go app (installed on your phone)
+Ngrok
+🚀 Setup Instructions
+1️⃣ Clone Repository
+git clone <repository-url>
+cd <project-folder>
+📱 Frontend Setup (Expo Go)
+Install dependencies:
+npm install
+Start Expo:
+npx expo start
 
-   ```bash
-   npx expo start
-   ```
+👉 This will open Expo Dev Tools in your browser.
 
-In the output, you'll find options to open the app in a
+▶️ Run on your phone (IMPORTANT)
+Install Expo Go from Play Store/App Store
+Make sure your phone and laptop are on the same WiFi
+Scan the QR code shown in terminal/browser
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+📌 Your app will open instantly in Expo Go
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+🖥️ Backend Setup
+Open new terminal:
+cd panic-backend
+npm install
+node server.js
 
-## Get a fresh project
+👉 Backend runs on:
 
-When you're ready, run:
+http://localhost:3000
+🌐 Connect Backend using Ngrok
+Start Ngrok:
+ngrok http 3000
 
-```bash
-npm run reset-project
-```
+👉 You’ll get:
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+https://random-id.ngrok.io
+🔗 Update API URL (VERY IMPORTANT)
 
-## Learn more
+In your frontend code, replace:
 
-To learn more about developing your project with Expo, look at the following resources:
+http://localhost:3000
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+with:
 
-## Join the community
+https://your-ngrok-url.ngrok.io
 
-Join our community of developers creating universal apps.
+❗ Without this, Expo Go won’t connect to backend
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+▶️ Run Everything Together
+
+You need 3 terminals:
+
+Terminal	Command
+Frontend	npx expo start
+Backend	node server.js
+Ngrok	ngrok http 3000
+📲 How to Use
+Open app in Expo Go
+Allow permissions (Location, etc.)
+Press SOS button
+App will:
+Send alert
+Share location
+⚠️ Common Issues (Important)
+❌ App works on Expo but API not working
+
+👉 Fix: Update Ngrok URL
+
+❌ QR not scanning
+
+👉 Use:
+
+npx expo start --tunnel
+❌ Network error
+
+👉 Check:
+
+Backend running
+Ngrok running
+Correct URL used
+💡 Tips
+Always restart Ngrok → URL changes every time
+Use real device (location won’t work properly on emulator)
+Keep all terminals running
+🤝 Contributing
+
+Pull requests are welcome!
+You can also open issues for bugs or suggestions.
