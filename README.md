@@ -44,7 +44,7 @@ Ensure the following software is installed:
 #### Step 1: Clone the Repository  
 
 ```bash
-git clone <(https://github.com/ShubhangiSingh7/WomenSafetyApp.git)>
+git clone https://github.com/ShubhangiSingh7/WomenSafetyApp.git
 ```
 
 #### Step 2: Install Frontend Dependencies 
