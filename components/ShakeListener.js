@@ -1,25 +1,39 @@
-import React, { useEffect } from "react";
-import { Vibration, Linking, Alert, Platform } from "react-native";
+import { useEffect } from "react";
 import { Accelerometer } from "expo-sensors";
+import { Vibration, Alert } from "react-native";
+import { triggerSOS } from "../Services/sosService";
 
 export default function ShakeListener() {
   useEffect(() => {
     let lastShake = 0;
+    let isProcessing = false;
 
-    const subscription = Accelerometer.addListener(accel => {
-      const totalForce = Math.sqrt(accel.x ** 2 + accel.y ** 2 + accel.z ** 2);
+    const subscription = Accelerometer.addListener((accel) => {
+      const totalForce = Math.sqrt(
+        accel.x ** 2 + accel.y ** 2 + accel.z ** 2
+      );
 
-      if (totalForce > 6) { // adjust sensitivity
+      if (totalForce > 6) {
         const now = Date.now();
-        if (now - lastShake > 1000) { // prevent multiple triggers
+
+        if (now - lastShake > 2000 && !isProcessing) {
           lastShake = now;
+          isProcessing = true;
+
           Vibration.vibrate(500);
 
-          // Open dialer
-          const phoneNumber = Platform.OS === "android" ? "tel:112" : "telprompt:112";
-          Linking.openURL(phoneNumber).catch(err => {
-            Alert.alert("Error", "Cannot make call: " + err.message);
-          });
+          // 🚨 POPUP ADDED HERE
+          Alert.alert(
+            "SOS Triggered 🚨",
+            "Shake detected! Sending emergency alert...",
+            [{ text: "OK" }]
+          );
+
+          triggerSOS("shake_triggered")
+            .catch((err) => console.log("SOS Error:", err.message))
+            .finally(() => {
+              isProcessing = false;
+            });
         }
       }
     });

@@ -1,5 +1,3 @@
-import * as Location from "expo-location";
-//import { Accelerometer } from "expo-sensors";
 import React, { useState } from "react";
 import {
   Alert,
@@ -10,7 +8,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { supabase } from "../../lib/supabase";
+import { triggerSOS } from "../../Services/sosService";
 
 export default function PanicButton() {
   const [isAlertSent, setIsAlertSent] = useState(false);
@@ -18,66 +16,9 @@ export default function PanicButton() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // useEffect(() => {
-  //   let lastShake = 0;
-
-  //   const subscription = Accelerometer.addListener(accel => {
-  //     const totalForce = Math.sqrt(accel.x ** 2 + accel.y ** 2 + accel.z ** 2);
- 
-  //     if (totalForce > 6) { // adjust sensitivity
-  //       const now = Date.now();
-  //       if (now - lastShake > 1000) { // prevent multiple triggers
-  //         lastShake = now;
-  //         Vibration.vibrate(500);
-  //         Linking.openURL("tel:112"); // opens dialer
-  //       }
-  //     }
-  //   });
-
-  //   Accelerometer.setUpdateInterval(100); // sensor update frequency
-  //   return () => subscription.remove();
-  // }, []);
-
-  const createSOSAlert = async (alert) => {
-    const { error } = await supabase.from("sos_alerts").insert([alert]);
-    if (error) throw error;
-  };
-
-  const sendSMS = async (numbers, msg) => {
-    const numbersStr = numbers.join(",");
-  
-    const resp = await fetch(
-      "https://unnotified-mellie-disjunctively.ngrok-free.dev/send-sms",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ numbers: numbersStr, message: msg }),
-      }
-    );
-  
-    const text = await resp.text();
-  
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      throw new Error("Server returned non-JSON response");
-    }
-  
-    if (!resp.ok) {
-      throw new Error("Server error while sending SMS");
-    }
-  
-    if (!data.success) {
-      throw new Error(data.error || "SMS sending failed");
-    }
-  
-    return true;
-  };  
-
   const callEmergency = () => {
     const phoneNumber = "112";
-  
+
     Linking.openURL(`tel:${phoneNumber}`)
       .catch((err) => {
         Alert.alert("Error", "Cannot make call: " + err.message);
@@ -87,48 +28,7 @@ export default function PanicButton() {
   const handleSOS = async () => { 
     setLoading(true);
     try {
-      const userResp = await supabase.auth.getUser();
-      const user = userResp.data.user;
-      if (!user) throw new Error("No logged-in user");
-
-      // Get location
-      let location = null;
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        const position = await Location.getCurrentPositionAsync({});
-        location = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-      }
-
-      // Insert SOS alert in Supabase
-      const alertData = {
-        user_id: user.id,
-        latitude: location?.latitude,
-        longitude: location?.longitude,
-        message: "SOS activated",
-        method: "button_pressed",
-        created_at: new Date().toISOString(),
-      };
-      await createSOSAlert(alertData);
-
-      // Get trusted contacts
-      const { data: contacts, error } = await supabase
-        .from("trusted_contacts")
-        .select("phone")
-        .eq("user_id", user.id);
-      if (error) throw error;
-
-      // Prepare SOS message
-      const mapLink = location
-        ? `https://maps.google.com/?q=${location.latitude},${location.longitude}`
-        : "Location not available";
-      const sosMessage = `HELP ME! I am in Danger. This is ${user.email}. My location: ${mapLink}`;
-
-      // Send SMS
-      const numbers = contacts.map(c => c.phone);
-      await sendSMS(numbers, sosMessage);
+      await triggerSOS("button_pressed");
 
       setIsAlertSent(true);
       setMessage("SOS alert sent! Your trusted contacts have been notified.");
@@ -139,7 +39,7 @@ export default function PanicButton() {
       }, 10000);
 
     } catch (error) {
-      setIsAlertSent(false);   // ensure button doesn't turn green
+      setIsAlertSent(false);
       setMessage(`Error sending SOS: ${error.message}`);
     } finally {
       setLoading(false);
@@ -176,7 +76,10 @@ export default function PanicButton() {
         <TouchableOpacity
           onPress={handleSOS}
           disabled={isAlertSent || loading}
-          style={[styles.sosButton, isAlertSent ? styles.sosSent : loading ? styles.sosLoading : styles.sosDefault]}
+          style={[
+            styles.sosButton,
+            isAlertSent ? styles.sosSent : loading ? styles.sosLoading : styles.sosDefault
+          ]}
         >
           <Text style={styles.sosText}>
             {loading ? "⏳ Sending..." : isAlertSent ? "✅ SOS Sent!" : "🚨 SOS"}
@@ -191,9 +94,6 @@ export default function PanicButton() {
               <Text style={styles.iconText}>{action.icon}</Text>
             </View>
             <Text style={styles.actionTitle}>{action.title}</Text>
-            <TouchableOpacity style={styles.actionBtn} onPress={action.action}>
-              <Text style={styles.actionBtnText}>{action.title}</Text>
-            </TouchableOpacity>
           </View>
         ))}
       </View>

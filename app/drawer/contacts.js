@@ -129,12 +129,6 @@ export default function Contacts() {
 
       {/* Quick actions */}
       <View style={styles.row}>
-        <TouchableOpacity style={[styles.button, styles.call]} onPress={() => handleCall(item.phone)}>
-          <Text style={styles.buttonText}>📞 Call</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.sms]} onPress={() => handleMessage(item.phone)}>
-          <Text style={styles.buttonText}>💬 SMS</Text>
-        </TouchableOpacity>
         {item.email && (
           <TouchableOpacity style={[styles.button, styles.email]} onPress={() => handleEmail(item.email)}>
             <Text style={styles.buttonText}>📧 Email</Text>
